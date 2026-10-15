@@ -1,14 +1,15 @@
+import { tierFor } from '../engine.js';
 import { pick, integer } from '../random.js';
 import { session, heading, button, element } from './shared.js';
 
 export function create(rng, difficulty) {
-  return { offer: pick(rng, ['A free towel!', 'Half-price Tuesdays!', 'A complimentary locker!']), checks: integer(rng, 1, Math.min(3, difficulty)), reverse: rng() < 0.5, price: integer(rng, 25, 65) };
+  return { offer: pick(rng, ['A free towel!', 'Half-price Tuesdays!', 'A complimentary locker!']), checks: tierFor(difficulty), reverse: rng() < 0.5, price: integer(rng, 25, 65) };
 }
 export default {
   id: 'gym', command: 'CANCEL THE GYM', patternId: 'gym', baseDuration: 19000,
   setup(root, rng, difficulty, finish) {
     const config = create(rng, difficulty);
-    const game = session(root, rng, 'Rep Quarry Club');
+    const game = session(root, rng, 'Rep Quarry Club', difficulty);
     let step = 0;
     function render() {
       game.content.replaceChildren();

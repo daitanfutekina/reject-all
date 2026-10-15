@@ -1,7 +1,9 @@
 import { seededRandom, shuffle } from './random.js';
 
 // Multipliers are relative to the original v1 base durations.
-export const CURVE = Object.freeze({ start: 1.4, winsPerStep: 6, step: 0.05, floor: 0.55, bossFloor: 0.8, firstEncounter: 1.5, relaxed: 1.75 });
+export const CURVE = Object.freeze({ start: 1.4, winsPerStep: 6, step: 0.05, floor: 0.55, bossFloor: 0.8, firstEncounter: 1.5, relaxed: 1.75, tier2: 3, tier3: 5 });
+
+export const tierFor = difficulty => difficulty >= CURVE.tier3 ? 3 : difficulty >= CURVE.tier2 ? 2 : 1;
 
 export function durationFor(baseDuration, level, relaxed = false, boss = false, { firstEncounter = false, minDuration = 0 } = {}) {
   const minimum = boss ? CURVE.bossFloor : CURVE.floor;

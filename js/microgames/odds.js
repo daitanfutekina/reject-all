@@ -1,13 +1,14 @@
+import { tierFor } from '../engine.js';
 import { integer, pick } from '../random.js';
 import { session, heading, button, element, drag } from './shared.js';
 
 export default {
-  id: 'odds', command: 'ODDS?', patternId: 'odds', baseDuration: 6000, minDuration: 4000,
+  id: 'odds', command: 'ODDS?', patternId: 'odds', baseDuration: 6000, minDuration: 5000,
   setup(root, rng, difficulty, finish) {
     const game = session(root, rng, 'Prism Crate', difficulty);
     heading(game.content, pick(rng, ['Aurora crate', 'Quartz cache', 'Opal box', 'Velvet vault']), 'Find and open the drop rates before buying.');
-    const count = integer(rng, 3, Math.min(5, difficulty + 2));
-    const oddsPage = integer(rng, 1, count - 1);
+    const count = 2 + tierFor(difficulty);
+    const oddsPage = count - 1;
     const rare = pick(rng, [1, 2, 3, 5]);
     const carousel = element('div', '', 'odds-carousel'); carousel.dataset.action = 'carousel';
     const card = element('div', '', 'crate-card'); const position = element('p', '', 'smallprint');

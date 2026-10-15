@@ -155,6 +155,7 @@ function nextRound() {
   app.querySelector('#command').textContent = current.command;
   app.querySelector('#hint').hidden = true;
   app.querySelector('#command').classList.toggle('boss-command', current.id === 'gym');
+  app.querySelector('#command').classList.toggle('long-command', current.command.length > 10);
   const transition = app.querySelector('#transition'); transition.hidden = false;
   transition.className = 'transition';
   transition.replaceChildren(element('p', current.id === 'gym' ? 'Boss · win back one life' : `Round ${run.played + 1}`, 'round-label'), element('strong', current.command, 'next-command'), element('p', `Score ${run.score} · ${run.lives} lives · Speed ${run.level}`));
@@ -168,6 +169,7 @@ function beginGame() {
   app.querySelector('#transition').hidden = true;
   app.querySelector('#command').textContent = current.command;
   app.querySelector('#command').classList.toggle('boss-command', current.id === 'gym');
+  app.querySelector('#command').classList.toggle('long-command', current.command.length > 10);
   const firstEncounter = direct ? false : progress.encounter(current.id);
   app.querySelector('#hint').textContent = firstEncounter ? current.hint : '';
   app.querySelector('#hint').hidden = !firstEncounter;

@@ -1,13 +1,14 @@
+import { tierFor } from '../engine.js';
 import { integer, shuffle, pick } from '../random.js';
 import { session, heading, checkbox, button, element } from './shared.js';
 
 export function create(rng, difficulty) {
   const labels = shuffle(rng, ['Partner offers', 'Product emails', 'Share usage data', 'Personalised ads', 'SMS promotions', 'Weekly newsletter', 'Share purchase history', 'Research invitations', 'Birthday deals', 'Share browsing habits', 'App notifications', 'Daily recommendations', 'Sponsor messages', 'Loyalty reminders']);
-  return { labels: labels.slice(0, integer(rng, 4, Math.min(8, 4 + difficulty))), terms: rng() < 0.65 };
+  return { labels: labels.slice(0, 2 + 2 * tierFor(difficulty)), terms: rng() < 0.65 };
 }
 export const isCorrect = (optional, required = true) => optional.every(value => !value) && required;
 export default {
-  id: 'untick', command: 'UNTICK!', patternId: 'untick', baseDuration: 5000, minDuration: 3800,
+  id: 'untick', command: 'UNTICK!', patternId: 'untick', baseDuration: 5000, minDuration: 5000,
   setup(root, rng, difficulty, finish) {
     const config = create(rng, difficulty);
     const game = session(root, rng, 'Post Pebble', difficulty);

@@ -1,4 +1,5 @@
-import { pick } from '../random.js';
+import { tierFor } from '../engine.js';
+import { pick, shuffle } from '../random.js';
 import { session, heading, checkbox, button, element } from './shared.js';
 
 export const questions = [
@@ -17,14 +18,15 @@ export const questions = [
 ];
 export function create(rng) { return { ...pick(rng, questions), initial: rng() < 0.5 }; }
 export default {
-  id: 'trick', command: 'SET IT!', patternId: 'trick', baseDuration: 5000,
+  id: 'trick', command: 'SET IT!', patternId: 'trick', baseDuration: 5000, minDuration: 5500,
   setup(root, rng, difficulty, finish) {
-    const config = create(rng);
+    const pool = tierFor(difficulty) === 1 ? [1, 6, 7, 8, 10, 11].map(index => questions[index]) : questions;
+    const configs = shuffle(rng, pool).slice(0, tierFor(difficulty)).map(question => ({ ...question, initial: rng() < 0.5 }));
     const game = session(root, rng, 'Syntax Attic', difficulty);
     heading(game.content, pick(rng, ['Your communication preferences', 'A word about your choices', 'One final preference', 'Messages on your terms', 'Fine-tune your inbox', 'A simple yes or no']), 'Your goal: receive NO offers.');
-    const input = checkbox(game, game.content, config.wording, config.initial, 'offers');
+    const inputs = configs.map((config, index) => checkbox(game, game.content, config.wording, config.initial, `offers-${index}`));
     game.content.append(element('p', 'Checked = statement enabled.', 'smallprint'));
-    button(game, game.content, 'Save preference', () => finish(input.checked === config.privateValue), 'site-primary', 'save');
+    button(game, game.content, 'Save preference', () => finish(inputs.every((input, index) => input.checked === configs[index].privateValue)), 'site-primary', 'save');
     return game;
   },
 };

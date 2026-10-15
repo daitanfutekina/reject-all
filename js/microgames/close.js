@@ -1,11 +1,12 @@
+import { tierFor } from '../engine.js';
 import { integer, shuffle, pick } from '../random.js';
 import { session, heading, button, element, drag } from './shared.js';
 
 export function create(rng, difficulty) {
-  return { count: integer(rng, 2, Math.min(4, difficulty + 2)), positions: shuffle(rng, ['top-left', 'bottom-right', 'top-right', 'bottom-left']), pitch: pick(rng, ['Let us send notifications!', 'Please join our newsletter!', 'One more offer before you go!', 'Unlock our daily deals!', 'Join the early access list!', 'Get alerts for every update!']), sheet: rng() < 0.5 };
+  return { count: 1 + tierFor(difficulty), positions: shuffle(rng, ['top-left', 'bottom-right', 'top-right', 'bottom-left']), pitch: pick(rng, ['Let us send notifications!', 'Please join our newsletter!', 'One more offer before you go!', 'Unlock our daily deals!', 'Join the early access list!', 'Get alerts for every update!']), sheet: rng() < 0.5 };
 }
 export default {
-  id: 'close', command: 'CLOSE!', patternId: 'close', baseDuration: 4500, minDuration: 3500,
+  id: 'close', command: 'CLOSE!', patternId: 'close', baseDuration: 4500, minDuration: 4500,
   setup(root, rng, difficulty, finish) {
     const config = create(rng, difficulty);
     const game = session(root, rng, 'Nudge Cabinet', difficulty);

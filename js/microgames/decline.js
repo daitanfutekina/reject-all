@@ -1,3 +1,4 @@
+import { tierFor } from '../engine.js';
 import { pick } from '../random.js';
 import { session, heading, button } from './shared.js';
 
@@ -5,10 +6,10 @@ export function create(rng) {
   return { insult: pick(rng, ['No thanks, I hate saving money', 'No, I enjoy paying too much', 'I would rather miss out', 'No, bargains are not for me', 'I prefer a boring inbox', 'No, keep the good stuff']), offer: pick(rng, [10, 15, 20, 25, 30, 35]), reverse: rng() < 0.5 };
 }
 export default {
-  id: 'decline', command: 'DECLINE!', patternId: 'decline', baseDuration: 3500,
+  id: 'decline', command: 'DECLINE!', patternId: 'decline', baseDuration: 3500, minDuration: 3500,
   setup(root, rng, difficulty, finish, options = {}) {
     const config = create(rng);
-    let dodges = difficulty >= 3 && rng() < 0.65 ? (options.reduced ? 1 : 2) : 0;
+    let dodges = tierFor(difficulty) === 3 ? (options.reduced ? 1 : 2) : 0;
     const game = session(root, rng, 'Ribbon Quarry', difficulty);
     heading(game.content, `${config.offer}% off. Your dignity included.`, 'Join our email list. We have so much to say.');
     const actions = [
@@ -24,6 +25,8 @@ export default {
       },
     ];
     if (config.reverse) actions.reverse();
-    actions.forEach(action => action()); return game;
+    actions.forEach(action => action());
+    for (let i = 0; i < tierFor(difficulty) - 1; i++) button(game, game.content, ['Only weekly deals', 'Send deals to my phone'][i], () => finish(false), 'small-button', `decoy-${i}`);
+    return game;
   },
 };

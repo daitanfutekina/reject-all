@@ -1,3 +1,4 @@
+import { tierFor } from '../engine.js';
 import { integer, shuffle } from '../random.js';
 import { session, heading, button, element } from './shared.js';
 
@@ -7,7 +8,7 @@ export default {
     const game = session(root, rng, 'Reset Orchard', difficulty);
     heading(game.content, 'A helpful privacy update', 'Turn everything OFF. Watch for resets until time ends.');
     const status = element('p', 'Your settings have been updated.', 'smallprint'); game.content.append(status);
-    const names = shuffle(rng, ['Ad tracking', 'Location sharing', 'Partner profiling', 'Usage sharing']).slice(0, integer(rng, 3, Math.min(4, difficulty + 2)));
+    const names = shuffle(rng, ['Ad tracking', 'Location sharing', 'Partner profiling', 'Usage sharing']).slice(0, 1 + tierFor(difficulty));
     const enabled = names.map(() => true);
     let remaining = options.duration ?? 7700, stableSince = null, elapsed = 0, previous = null;
     const interval = Math.max(850, 1450 - difficulty * 50) * (options.relaxed ? 1.75 : 1);

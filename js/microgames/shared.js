@@ -1,3 +1,4 @@
+import { tierFor } from '../engine.js';
 import { pick } from '../random.js';
 
 export function session(root, rng, title, difficulty = 1) {
@@ -11,6 +12,7 @@ export function session(root, rng, title, difficulty = 1) {
   bar.textContent = `${title.toLowerCase().replaceAll(' ', '-')}.example`;
   const content = document.createElement('div');
   content.className = 'site-content';
+  content.dataset.tier = String(tierFor(difficulty));
   content.dataset.skin = pick(rng, ['paper', 'ledger', 'catalogue']);
   content.dataset.layout = pick(rng, difficulty < 3 ? ['left', 'center'] : ['left', 'center', 'inset']);
   root.append(bar, content);

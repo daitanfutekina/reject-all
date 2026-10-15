@@ -1,3 +1,4 @@
+import { tierFor } from '../engine.js';
 import { pick } from '../random.js';
 import { session, heading, button, element } from './shared.js';
 
@@ -13,6 +14,7 @@ export default {
     const offer = element('div', '', 'retention-offer'); offer.hidden = true;
     offer.append(element('strong', pick(rng, ['Wait! Half price for a month.', 'A free upgrade, just for you.', 'Stay and collect bonus credits.'])));
     button(game, offer, 'Take the offer', () => finish(false), '', 'retain');
+    for (let i = 0; i < tierFor(difficulty) - 1; i++) button(game, offer, ['Pause payments instead', 'Keep account with a bonus'][i], () => finish(false), '', `retain-${i}`);
     game.content.append(meter, status, offer);
     let pointer = null, held = 0, previous = null, done = false;
     const reset = () => { pointer = null; held = 0; meter.value = 0; offer.hidden = true; status.textContent = 'Released. Hold again to cancel.'; };

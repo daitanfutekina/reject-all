@@ -29,6 +29,14 @@ entries.push(
   { id: 'odds', name: 'Hidden loot box odds', description: 'Selling a random reward while making its probabilities hard to find prevents an informed choice.', example: 'Drop rates hide several cards into a shop carousel, away from the buy button.', law: 'Apple App Store rules require paid random-item mechanisms such as loot boxes to disclose odds before purchase.', source: 'apple' },
 );
 
+entries.push(
+  { id: 'trial', name: 'Hidden subscription terms', description: 'Emphasising a free trial while obscuring when full-price billing begins.', example: 'A renewal date sits in small print beside more prominent reminder dates.', law: 'Buried material subscription terms can be deceptive. The FTC identifies hidden subscriptions as a dark-pattern concern.', source: 'ftc' },
+  { id: 'unsubscribe', name: 'Unsubscribe obstruction', description: 'Adding detours between a request to stop messages and the option that actually stops them.', example: 'An email preferences page promotes a temporary pause while hiding the permanent opt-out.', law: 'The FTC identifies obstructive cancellation flows as a dark-pattern concern. Applicable requirements depend on context.', source: 'ftc' },
+  { id: 'contacts', name: 'Forced sharing', description: 'Pressuring people to upload an address book using prominent acceptance and confusing refusal choices.', example: 'Find-friends onboarding offers a one-time upload after you deny contact access.', law: 'Where GDPR consent is the basis, it must be freely given, specific, informed and unambiguous.', source: 'consent' },
+  { id: 'delete', name: 'Account roach motel', description: 'Making account creation easy while burying the permanent exit behind settings and retention offers.', example: 'Deactivate and Take a break appear before a hidden Delete account option.', law: 'Deceptive exit obstacles can raise consumer-protection concerns; account deletion rights depend on the context.', source: 'ftc' },
+  { id: 'price', name: 'Price framing', description: 'Using different billing periods or a low headline rate to make a more expensive plan look cheaper.', example: '$1.99 per week costs $103.48 over 52 weeks, more than $6 per month over 12 months.', law: 'Comparing billing periods is not inherently unlawful. Deceptive pricing or hidden fees can raise FTC Act concerns.', source: 'ftc' },
+);
+
 const KEY = 'reject-all-v1';
 export function createProgress(getStorage = () => globalThis.localStorage) {
   let data = { unlocked: [], seen: [], best: 0, settings: {} };
