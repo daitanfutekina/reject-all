@@ -2,6 +2,9 @@ export const sources = {
   ftc: { title: 'FTC: Bringing Dark Patterns to Light (2022)', url: 'https://www.ftc.gov/reports/bringing-dark-patterns-light' },
   consent: { title: 'EDPB: consent and lawful processing', url: 'https://www.edpb.europa.eu/sme/be-compliant/process-personal-data-lawfully_en' },
   dsa: { title: 'EU Digital Services Act, Article 25', url: 'https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng' },
+  planet49: { title: 'EU Court of Justice: Planet49 (2019)', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62017CJ0673' },
+  gdpr: { title: 'GDPR, Articles 7 and 25', url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng' },
+  apple: { title: 'Apple App Review Guidelines, 3.1.1', url: 'https://developer.apple.com/app-store/review/guidelines/#in-app-purchase' },
 };
 
 export const entries = [
@@ -18,13 +21,23 @@ export const entries = [
   { id: 'gym', name: 'Roach motel', description: 'Making entry effortless and leaving exhausting. You signed up for exercise, but the cancellation is the obstacle course.', example: 'Cancellation hides behind pause offers and repeated confirmation screens.', law: 'Deceptive cancellation obstacles can violate the FTC Act.', source: 'ftc' },
 ];
 
+entries.push(
+  { id: 'scroll', name: 'Buried information', description: 'Placing an important choice beneath a wall of text makes it easy to miss.', example: 'An opt-out sits near the end of a long agreement while acceptance stays prominent.', law: 'FTC guidance calls for clear and conspicuous disclosures; burying important terms can be deceptive.', source: 'ftc' },
+  { id: 'slide', name: 'Preset consent', description: 'A control starts at the setting the business wants, making inaction look like agreement.', example: 'Partner consent sliders arrive set to maximum sharing, with some made to look unavailable.', law: 'The EU Court of Justice rejected pre-ticked cookie consent in Planet49 (2019). GDPR consent requires an affirmative act.', source: 'planet49' },
+  { id: 'hold', name: 'Cancellation friction', description: 'Adding unnecessary effort to leaving can pressure people into keeping an unwanted subscription.', example: 'A cancellation button requires a long hold while retention offers interrupt the flow.', law: 'Deceptive cancellation obstacles draw FTC scrutiny and can violate the FTC Act.', source: 'ftc' },
+  { id: 'whack', name: 'Resetting privacy choices', description: 'An update restores sharing defaults after you deliberately turned them off.', example: 'Tracking switches turn back on after a service update.', law: 'GDPR Article 25 requires data protection by default. Where consent is the basis, Article 7 requires withdrawal to be as easy as giving consent.', source: 'gdpr' },
+  { id: 'odds', name: 'Hidden loot box odds', description: 'Selling a random reward while making its probabilities hard to find prevents an informed choice.', example: 'Drop rates hide several cards into a shop carousel, away from the buy button.', law: 'Apple App Store rules require paid random-item mechanisms such as loot boxes to disclose odds before purchase.', source: 'apple' },
+);
+
 const KEY = 'reject-all-v1';
 export function createProgress(getStorage = () => globalThis.localStorage) {
-  let data = { unlocked: [], best: 0, settings: {} };
+  let data = { unlocked: [], seen: [], best: 0, settings: {} };
   try {
     const saved = JSON.parse(getStorage().getItem(KEY));
     if (saved && typeof saved === 'object') {
       data.unlocked = Array.isArray(saved.unlocked) ? [...new Set(saved.unlocked.filter(id => entries.some(entry => entry.id === id)))] : [];
+      // A v1 unlock proves an encounter; losses were not recorded in v1.
+      data.seen = [...new Set([...data.unlocked, ...(Array.isArray(saved.seen) ? saved.seen : [])])].filter(id => entries.some(entry => entry.id === id));
       data.best = Number.isFinite(saved.best) && saved.best >= 0 ? Math.floor(saved.best) : 0;
       for (const name of ['mute', 'relaxed', 'reduced']) if (typeof saved.settings?.[name] === 'boolean') data.settings[name] = saved.settings[name];
     }
@@ -32,14 +45,19 @@ export function createProgress(getStorage = () => globalThis.localStorage) {
   const save = () => { try { getStorage().setItem(KEY, JSON.stringify(data)); } catch { /* Memory-only fallback. */ } };
   return {
     get unlocked() { return [...data.unlocked]; },
+    get seen() { return [...data.seen]; },
     get best() { return data.best; },
     get settings() { return { ...data.settings }; },
+    encounter(id) {
+      if (!entries.some(entry => entry.id === id) || data.seen.includes(id)) return false;
+      data.seen.push(id); save(); return true;
+    },
     unlock(id) {
       if (!entries.some(entry => entry.id === id) || data.unlocked.includes(id)) return false;
       data.unlocked.push(id); save(); return true;
     },
     record(score) { data.best = Math.max(data.best, score); save(); },
     configure(settings) { data.settings = { ...data.settings, ...settings }; save(); },
-    reset() { data = { unlocked: [], best: 0, settings: {} }; save(); },
+    reset() { data = { unlocked: [], seen: [], best: 0, settings: {} }; save(); },
   };
 }

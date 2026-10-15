@@ -66,9 +66,9 @@ function title() {
   menu(`<section class="title-screen">
     <div class="title-copy"><p class="edition">The dark pattern arcade</p><h1>REJECT<br>ALL<span class="title-cross" aria-hidden="true">×</span></h1>
     <p class="tagline">The internet wants your consent.<br>Make it work for it.</p>
-    <div class="title-actions"><button id="play" class="primary">Play</button><button id="guide">Field Guide <span>${progress.unlocked.length}/11</span></button><button id="settings">Settings</button></div>
+    <div class="title-actions"><button id="play" class="primary">Play</button><button id="guide">Field Guide <span>${progress.unlocked.length}/${entries.length}</span></button><button id="settings">Settings</button></div>
     <details class="seed-options"><summary>Play a specific seed</summary><label>Run seed <input id="seed" maxlength="80" placeholder="Any word or number" autocomplete="off"></label></details></div>
-    <aside class="title-demo" aria-label="How to play"><div class="fake-tab">Definitely a normal website</div><div class="demo-content"><div class="demo-stamp">NOPE.</div><h2>We need absolutely<br>all of your data.</h2><div class="fake-accept">Sounds reasonable</div><div class="fake-reject">Actually, no thanks.</div></div><div class="how-to"><strong>Read the command. Outsmart the screen.</strong><p>Tap or click. Four lives. A few seconds to say no.<br>Every win adds a pattern to your Field Guide.</p><p class="smallprint">Esc / P to pause · More time in Settings</p></div></aside>
+    <aside class="title-demo" aria-label="How to play"><div class="fake-tab">Definitely a normal website</div><div class="demo-content"><div class="demo-stamp">NOPE.</div><h2>We need absolutely<br>all of your data.</h2><div class="fake-accept">Sounds reasonable</div><div class="fake-reject">Actually, no thanks.</div></div><div class="how-to"><strong>Read the command. Outsmart the screen.</strong><p>Tap, drag, scroll or hold. Four lives. A few seconds to say no.<br>Every win adds a pattern to your Field Guide.</p><p class="smallprint">Esc / P to pause · More time in Settings</p></div></aside>
   </section>`);
   on('play', () => start(app.querySelector('#seed').value.trim() || freshSeed()));
   on('guide', () => guide(title));
@@ -99,7 +99,7 @@ function showSettings() {
 }
 
 function guide(back) {
-  menu(`<section class="menu-page guide-page"><button id="back" class="back">Back</button><h1>Field Guide</h1><p>Know the trick. Keep the receipt.</p><p class="guide-count">${progress.unlocked.length} of 11 patterns collected</p><div class="guide-grid" id="entries"></div><p class="disclaimer">Simplified for a game. Not legal advice.</p></section>`);
+  menu(`<section class="menu-page guide-page"><button id="back" class="back">Back</button><h1>Field Guide</h1><p>Know the trick. Keep the receipt.</p><p class="guide-count">${progress.unlocked.length} of ${entries.length} patterns collected</p><div class="guide-grid" id="entries"></div><p class="disclaimer">Simplified for a game. Not legal advice.</p></section>`);
   const list = app.querySelector('#entries');
   for (const entry of entries) {
     const unlocked = progress.unlocked.includes(entry.id);
@@ -116,7 +116,7 @@ function guide(back) {
 
 function stage() {
   app.innerHTML = `<section class="arena"><div class="hud"><span id="lives"></span><span id="score"></span><span id="speed"></span><button id="pause" class="quiet">Pause</button></div>
-    <div class="command-row"><h1 id="command"></h1><span id="seconds"></span></div><div id="timer" class="timer" role="progressbar" aria-label="Time remaining" aria-valuemin="0" aria-valuemax="100"><div id="timer-fill"></div></div>
+    <div class="command-row"><h1 id="command"></h1><span id="seconds"></span></div><p id="hint" class="encounter-hint" hidden></p><div id="timer" class="timer" role="progressbar" aria-label="Time remaining" aria-valuemin="0" aria-valuemax="100"><div id="timer-fill"></div></div>
     <div class="play-zone"><div id="site" class="fake-site"></div><div id="transition" class="transition" aria-live="polite"></div></div><p class="run-note" id="run-note"></p>
     <div id="pause-overlay" class="pause-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden><div><h2 id="pause-title">Paused.</h2><p>Even the fake urgency can wait.</p><button id="resume" class="primary">Resume</button><button id="quit">End run</button></div></div></section>`;
   on('pause', togglePause); on('resume', togglePause); on('quit', () => { clock.paused = false; gameOver(); });
@@ -153,6 +153,7 @@ function nextRound() {
   current = byId[next.id]; phase = 'intro';
   const site = app.querySelector('#site'); site.inert = true;
   app.querySelector('#command').textContent = current.command;
+  app.querySelector('#hint').hidden = true;
   app.querySelector('#command').classList.toggle('boss-command', current.id === 'gym');
   const transition = app.querySelector('#transition'); transition.hidden = false;
   transition.className = 'transition';
@@ -167,14 +168,17 @@ function beginGame() {
   app.querySelector('#transition').hidden = true;
   app.querySelector('#command').textContent = current.command;
   app.querySelector('#command').classList.toggle('boss-command', current.id === 'gym');
-  duration = durationFor(current.baseDuration, run.current.difficulty, settings.relaxed, current.id === 'gym');
+  const firstEncounter = direct ? false : progress.encounter(current.id);
+  app.querySelector('#hint').textContent = firstEncounter ? current.hint : '';
+  app.querySelector('#hint').hidden = !firstEncounter;
+  duration = durationFor(current.baseDuration, run.current.difficulty, settings.relaxed, current.id === 'gym', { firstEncounter, minDuration: current.minDuration });
   clock.start(duration, performance.now());
-  active = current.setup(site, seededRandom(run.current.seed), run.current.difficulty, finish);
+  active = current.setup(site, seededRandom(run.current.seed), run.current.difficulty, finish, { duration, relaxed: settings.relaxed, reduced: settings.reduced });
   active.update?.(duration);
 }
 function finish(won) {
   if (phase !== 'active' || clock.paused) return;
-  if (clock.advance(performance.now()) <= 0) won = Boolean(current.timeoutWin);
+  if (clock.advance(performance.now()) <= 0) won = timeoutResult();
   phase = 'feedback';
   app.querySelector('#site').inert = true;
   run.resolve(won);
@@ -188,6 +192,7 @@ function finish(won) {
   app.querySelector('#seconds').textContent = won ? 'Cleared' : 'Lost a life';
   clock.start(1000, performance.now());
 }
+function timeoutResult() { return active?.timeoutResult?.() ?? Boolean(current.timeoutWin); }
 function tick(now) {
   if (phase === 'menu') return;
   const remaining = clock.advance(now);
@@ -201,7 +206,7 @@ function tick(now) {
     }
     if (remaining === 0) {
       if (phase === 'intro') beginGame();
-      else if (phase === 'active') finish(Boolean(current.timeoutWin));
+      else if (phase === 'active') finish(timeoutResult());
       else if (direct) debugResult();
       else if (run.over) gameOver();
       else nextRound();
@@ -213,6 +218,7 @@ function togglePause() {
   if (phase === 'menu') return;
   const paused = !clock.paused;
   clock.setPaused(paused, performance.now());
+  if (paused) active?.cancelInput?.();
   const overlay = app.querySelector('#pause-overlay'); overlay.hidden = !paused;
   for (const selector of ['#site', '#pause']) app.querySelector(selector).inert = paused || (selector === '#site' && phase !== 'active');
   if (paused) { pausedFocus = document.activeElement; app.querySelector('#resume').focus(); }

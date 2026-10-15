@@ -801,6 +801,160 @@ input[type=text],input:not([type]) {
 .smoke-stage:empty {
   display: none;
 }
+.encounter-hint {
+  margin: -4px 0 12px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.site-content[data-skin="ledger"] {
+  background: #f4f2e9;
+  border-top: 5px double var(--site-accent);
+}
+.site-content[data-skin="catalogue"] {
+  background: #edf4f7;
+  border-top: 5px solid var(--site-accent);
+}
+.site-content[data-layout="center"]>h2,
+.site-content[data-layout="center"]>p {
+  text-align: center;
+}
+.site-content[data-layout="inset"] {
+  border-left: 8px solid var(--site-accent);
+}
+.terms-box {
+  height: 230px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  border: 1px solid #aab4c4;
+  padding: 14px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+.terms-box p {
+  line-height: 1.6;
+}
+.slider-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  padding: 0 6px;
+}
+.site-content .slider-label {
+  margin: 0;
+  font-size: 12px;
+}
+.consent-slider {
+  position: relative;
+  height: 44px;
+  margin: 0 12px;
+  touch-action: none;
+  cursor: ew-resize;
+  user-select: none;
+  background: linear-gradient(transparent 17px, var(--site-accent) 17px, var(--site-accent) 27px, transparent 27px);
+}
+.slider-thumb {
+  position: absolute;
+  top: 8px;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--site-accent);
+  background: white;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.muted-slider {
+  filter: grayscale(1);
+  opacity: .65;
+}
+.hold-button, .draggable-item, .sheet-handle, .odds-carousel {
+  touch-action: none;
+  user-select: none;
+}
+.hold-button {
+  width: 100%;
+  min-height: 64px;
+}
+.hold-progress {
+  width: 100%;
+  height: 22px;
+  margin: 16px 0 8px;
+  accent-color: var(--site-accent);
+}
+.retention-offer {
+  padding: 14px;
+  border: 2px dashed var(--site-accent);
+  background: #fff4c5;
+  font-size: 13px;
+}
+.retention-offer button {
+  display: block;
+  margin-top: 10px;
+}
+.toggle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.privacy-toggle {
+  min-height: 70px;
+}
+.privacy-toggle[aria-pressed="true"] {
+  background: var(--site-accent);
+  color: white;
+}
+.privacy-toggle[aria-pressed="false"] {
+  background: #e4efe8;
+  color: #173c2c;
+}
+.cart-bin {
+  border: 2px dashed #69717d;
+  padding: 18px 8px;
+  margin: 12px 0;
+  text-align: center;
+  font-size: 12px;
+}
+.draggable-item {
+  cursor: grab;
+  position: relative;
+  z-index: 1;
+  background: #f7f9ff;
+}
+.nag-popup.bottom-sheet {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+}
+.sheet-handle {
+  cursor: grab;
+  min-height: 44px;
+  text-align: center;
+  font-size: 12px;
+}
+.site-content .evasive-link {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 34px;
+  transition: transform .18s;
+}
+.odds-carousel {
+  border: 1px solid #aab4c4;
+  overflow: hidden;
+  padding: 12px;
+  text-align: center;
+  cursor: grab;
+}
+.crate-card {
+  min-height: 160px;
+}
+.crate-icon {
+  font-size: 56px;
+  color: var(--site-accent);
+}
 .reduced-motion * {
   animation: none!important;
   transition: none!important;
