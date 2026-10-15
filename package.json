@@ -1,0 +1,6 @@
+{
+  "name": "reject-all",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/", "start": "node tools/serve.mjs" }
+}
