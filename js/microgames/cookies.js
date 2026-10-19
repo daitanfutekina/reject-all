@@ -13,6 +13,7 @@ export default {
     let step = 0;
     function render() {
       game.content.replaceChildren();
+      game.step(step + 1, config.depth + 1);
       heading(game.content, step ? 'Your choices matter*' : config.pitch, step ? '*Especially the profitable ones.' : `All ${config.partners} of our partners would love a little piece of it.`);
       const options = [
         () => button(game, game.content, 'Accept all', () => finish(false), 'site-primary jumbo', 'accept'),

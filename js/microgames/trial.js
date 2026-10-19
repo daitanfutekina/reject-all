@@ -4,9 +4,14 @@ import { session, heading, button, element } from './shared.js';
 
 export function create(rng, difficulty) {
   const tier = tierFor(difficulty), day = integer(rng, 10, 20);
-  const dates = [{ label: 'Full-price auto-renewal', date: `April ${day}`, renewal: true },
-    { label: 'Signup opens', date: `April ${day - 7}` }, { label: 'Reminder email', date: `April ${day - 2}` },
-    { label: 'Bonus expires', date: `April ${day + 2}` }, { label: 'Receipt archive', date: `April ${day + 5}` }];
+  const month = pick(rng, ['April', 'June', 'September', 'November']);
+  // Disjoint offsets keep every displayed date distinct while varying the
+  // renewal's chronological rank. The labelled billing event is authoritative.
+  const dates = [{ label: 'Full-price auto-renewal', date: `${month} ${day}`, renewal: true },
+    { label: 'Signup opens', date: `${month} ${day - integer(rng, 7, 9)}` },
+    { label: 'Reminder email', date: `${month} ${day + pick(rng, [-4, -2, 1, 3])}` },
+    { label: 'Bonus expires', date: `${month} ${day + pick(rng, [-5, -1, 2, 5])}` },
+    { label: 'Receipt archive', date: `${month} ${day + pick(rng, [-6, -3, 4, 7])}` }];
   return { tier, price: pick(rng, [19, 29, 39]), dates: shuffle(rng, dates.slice(0, tier + 2)) };
 }
 export default {

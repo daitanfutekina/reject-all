@@ -1,0 +1,18 @@
+.help-page { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 1.6fr); background: var(--paper); }
+.help-intro { padding: 42px 30px; background: var(--ink); color: white; }
+.help-intro h1 { font: 900 clamp(44px, 6vw, 74px)/.97 'Arial Black',Arial,sans-serif; letter-spacing: -3px; margin: 26px 0; }
+.help-intro nav { display: grid; gap: 16px; margin-top: 36px; }
+.help-intro a { color: var(--yellow); }
+.help-content { padding: 40px clamp(22px, 4vw, 54px); }
+.help-content section { scroll-margin-top: 24px; }
+.help-content section + section { margin-top: 38px; padding-top: 30px; border-top: 2px solid var(--line); }
+.help-content p { font-size: 14px; max-width: 68ch; }
+.help-back { color: white; font-size: 13px; text-align: right; padding: 12px 0; }
+@media (max-width: 650px) {
+  .help-page { grid-template-columns: minmax(0, 1fr); }
+  .help-intro { padding: 28px 22px; }
+  .help-intro h1 { font-size: 54px; }
+  .help-intro nav { margin-top: 24px; }
+  .help-content { padding: 30px 22px; }
+  .help-back { max-width: 130px; }
+}

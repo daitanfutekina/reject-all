@@ -1,23 +1,33 @@
 import { tierFor } from '../engine.js';
 import { pick } from '../random.js';
+import { BASES, selectBase, mountSite } from '../sites.js';
 
 export function session(root, rng, title, difficulty = 1) {
   const controller = new AbortController();
   const cancellations = [];
   const cancelInput = () => cancellations.forEach(cancel => cancel());
   root.replaceChildren();
-  root.style.setProperty('--site-accent', pick(rng, ['#3459ad', '#795087', '#286960', '#97532c']));
-  const bar = document.createElement('div');
-  bar.className = 'browser-bar';
-  bar.textContent = `${title.toLowerCase().replaceAll(' ', '-')}.example`;
-  const content = document.createElement('div');
-  content.className = 'site-content';
+  // Keep the original random draws stable for existing game variants.
+  pick(rng, ['#3459ad', '#795087', '#286960', '#97532c']);
+  const skin = pick(rng, ['paper', 'ledger', 'catalogue']);
+  const layout = pick(rng, difficulty < 3 ? ['left', 'center'] : ['left', 'center', 'inset']);
+  const sample = rng();
+  const base = BASES[root.dataset.previewIdentity] ? root.dataset.previewIdentity : selectBase(title, sample, root.dataset.game);
+  const appMode = ['social', 'astral', 'arcade'].includes(base);
+  const requestedVariant = Number(root.dataset.previewVariant);
+  const variant = root.dataset.previewVariant !== undefined && root.dataset.previewVariant !== '' && Number.isSafeInteger(requestedVariant) && requestedVariant >= 0 ? requestedVariant : Math.floor(sample * 1000000);
+  const { content, progress } = mountSite(root, base, appMode, title, variant);
   content.dataset.tier = String(tierFor(difficulty));
-  content.dataset.skin = pick(rng, ['paper', 'ledger', 'catalogue']);
-  content.dataset.layout = pick(rng, difficulty < 3 ? ['left', 'center'] : ['left', 'center', 'inset']);
-  root.append(bar, content);
+  content.dataset.skin = skin;
+  content.dataset.layout = layout;
   return {
     content,
+    identity: base,
+    step(current, total) {
+      progress.hidden = total < 2;
+      progress.textContent = `${current} / ${total}`;
+      progress.setAttribute('aria-label', `Step ${current} of ${total}`);
+    },
     cancelInput,
     onCancel(callback) { cancellations.push(callback); },
     on(node, event, callback) { node.addEventListener(event, callback, { signal: controller.signal }); },

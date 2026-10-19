@@ -1,0 +1,50 @@
+/* Load after sites.css and play.css. Only the two quick card games use these rules. */
+:is([data-game="phish"], [data-game="adspot"]) .site-scenery,
+:is([data-game="phish"], [data-game="adspot"]) .site-bottomline,
+:is([data-game="phish"], [data-game="adspot"]) .app-tabbar,
+:is([data-game="phish"], [data-game="adspot"]) .home-indicator { display: none; }
+.fake-site:is([data-game="phish"], [data-game="adspot"]) .site-world { display: block; min-height: 0; padding: 10px; }
+.fake-site:is([data-game="phish"], [data-game="adspot"]) .site-task { max-width: 640px; margin: 0 auto; }
+.fake-site:is([data-game="phish"], [data-game="adspot"]) .site-content { padding: 12px; }
+.fake-site:is([data-game="phish"], [data-game="adspot"]) .site-content > h2 { font-size: 19px; margin: 0 0 5px; }
+.fake-site:is([data-game="phish"], [data-game="adspot"]) .site-content > p { font-size: 12px; line-height: 1.35; margin: 0 0 9px; }
+.quick-game-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.fake-site .site-content .quick-game-card {
+  display: grid; gap: 3px; min-width: 0; width: 100%; min-height: 68px;
+  padding: 9px 10px; margin: 0; text-align: left; white-space: normal;
+  color: #233047; background: #fff; border: 1px solid #c5ceda;
+  border-radius: 7px; line-height: 1.2; cursor: pointer;
+}
+.fake-site .site-content .quick-game-card:hover { background: #f0f5fa; border-color: #5577a4; }
+.fake-site .site-content .quick-game-card:focus-visible { outline: 3px solid #315bd6; outline-offset: 2px; }
+.phish-official { padding: 7px 9px; margin-bottom: 8px; background: #edf5fc; border-left: 3px solid #4779b5; color: #233047; font-size: 12px; }
+.phish-official strong, .phish-domain { font-family: ui-monospace, Consolas, monospace; font-size: 12px; letter-spacing: 0; }
+.phish-domain { color: #263f60; white-space: nowrap; }
+.phish-sender { color: #526079; font-size: 11px; }
+.phish-subject { font-size: 13px; font-weight: 600; }
+.fake-site .site-content .adspot-post { grid-template-columns: 72px minmax(0, 1fr); gap: 3px 10px; }
+.adspot-post > :not(.adspot-thumb) { grid-column: 2; }
+.adspot-thumb { grid-column: 1; grid-row: 1 / 4; align-self: center; display: grid; place-items: center; position: relative; overflow: hidden; width: 72px; height: 72px; border-radius: 6px; color: #374256; font-weight: 700; }
+/* The same photo treatment covers every initial; failed images leave the initial visible. */
+.adspot-thumb::after { content: ''; position: absolute; inset: 0; background: var(--adspot-image) center / cover no-repeat; }
+.adspot-thumb.mint { background: #d7eee4; --adspot-image: url('../assets/post-desk.webp'); }
+.adspot-thumb.peach { background: #f8dfd1; --adspot-image: url('../assets/post-coast.webp'); }
+.adspot-thumb.lilac { background: #e6def5; --adspot-image: url('../assets/products/4.webp'); }
+.adspot-thumb.sand { background: #efe8ca; --adspot-image: url('../assets/post-coffee.webp'); }
+.adspot-author { color: #526079; font-size: 11px; }
+.adspot-title { font-size: 13px; font-weight: 600; }
+.adspot-disclosure { color: #44536a; font-size: 12px; font-weight: 500; }
+@media (max-width: 620px), (max-height: 700px) {
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .site-header > :not(:first-child) { display: none; }
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .site-header > :first-child { min-height: 38px; padding: 6px 12px; }
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .site-nav { display: none; }
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .task-location { padding: 5px 10px; }
+}
+@media (max-width: 620px) {
+  .quick-game-grid { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .site-world { padding: 6px; }
+  .fake-site:is([data-game="phish"], [data-game="adspot"]) .site-content { padding: 10px; }
+  .fake-site .site-content .quick-game-card { min-height: 56px; padding: 6px 8px; gap: 2px; }
+  .fake-site .site-content .adspot-post { grid-template-columns: 44px minmax(0, 1fr); column-gap: 8px; }
+  .adspot-thumb { width: 44px; height: 44px; }
+}

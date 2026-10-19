@@ -46,7 +46,7 @@ export default {
     if (config.tier >= 2) {
       const noise = element('div', '', 'mirror-noise');
       noise.append(element('span', 'Scan complete: 0 threats'), element('span', 'Your download will begin in 5...'));
-      checkbox(game, noise, 'Recommended: install DriverSprout too (Ad)', true, 'driver');
+      button(game, noise, 'Recommended: install DriverSprout too (Ad)', () => finish(false), 'small-button', 'driver');
       page.append(noise);
     }
     if (config.mirror) page.append(original);

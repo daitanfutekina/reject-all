@@ -7,7 +7,7 @@ export const questions = [
   { wording: 'Do not send me promotional offers.', privateValue: true },
   { wording: 'Do not stop sending me offers.', privateValue: false },
   { wording: 'Keep me opted out of offers.', privateValue: true },
-  { wording: 'Uncheck to not opt out of receiving offers.', privateValue: true },
+  { wording: 'Do not cancel my opt-out from offers.', privateValue: true },
   { wording: 'Opt out of not receiving offers.', privateValue: false },
   { wording: 'Do not include me in offer emails.', privateValue: true },
   { wording: 'Keep sending me promotional offers.', privateValue: false },

@@ -1,4 +1,7 @@
 export const sources = {
+  phishing: { title: 'FTC: Recognize and avoid phishing scams', url: 'https://consumer.ftc.gov/articles/how-recognize-avoid-phishing-scams' },
+  nativeads: { title: 'FTC: Native advertising guidance', url: 'https://www.ftc.gov/business-guidance/resources/native-advertising-guide-businesses' },
+  deceptive: { title: 'Deceptive Patterns: types (Harry Brignull et al.)', url: 'https://deceptive.design/types/' },
   ftc: { title: 'FTC: Bringing Dark Patterns to Light (2022)', url: 'https://www.ftc.gov/reports/bringing-dark-patterns-light' },
   consent: { title: 'EDPB: consent and lawful processing', url: 'https://www.edpb.europa.eu/sme/be-compliant/process-personal-data-lawfully_en' },
   dsa: { title: 'EU Digital Services Act, Article 25', url: 'https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng' },
@@ -12,7 +15,6 @@ export const entries = [
   { id: 'untick', name: 'Preselection', description: 'Choosing for you before you have chosen anything. A checked box quietly turns doing nothing into saying yes.', example: 'A newsletter and partner-sharing box arrive already ticked.', law: 'Pre-ticked boxes do not constitute valid GDPR consent.', source: 'consent' },
   { id: 'decline', name: 'Confirmshaming', description: 'Writing the refusal as an insult to make you feel bad about choosing it. Your button is not a personality test.', example: 'The discount pop-up offers “No, I prefer wasting money.”', law: 'Manipulative interfaces may raise issues under the FTC Act’s unfairness or deception ban.', source: 'ftc' },
   { id: 'remove', name: 'Sneak into basket', description: 'Adding an extra purchase without a clear request from you. The cart has developed expensive opinions.', example: 'A protection plan appears beside the item you actually selected.', law: 'Adding unwanted charges deceptively can violate the FTC Act.', source: 'ftc' },
-  { id: 'cheaper', name: 'Drip pricing', description: 'Showing a tempting starting price, then revealing unavoidable charges later. The headline price is only the opening act.', example: 'A $12 booking acquires an $8 service fee at checkout.', law: 'Deceptive fee disclosures can violate the FTC Act; some sectors have additional rules.', source: 'ftc' },
   { id: 'wait', name: 'Fake urgency', description: 'Inventing scarcity or a deadline to rush your decision. Sometimes the best click is no click.', example: 'A “last chance” countdown restarts whenever the page reloads.', law: 'False scarcity claims can be deceptive under the FTC Act.', source: 'ftc' },
   { id: 'download', name: 'Disguised ads', description: 'Making advertising look like the content or control you came for. The loudest download button might download regret.', example: 'An ad resembles a file button while the real file sits below it.', law: 'Misleading people about what is advertising can violate the FTC Act.', source: 'ftc' },
   { id: 'trick', name: 'Trick question', description: 'Using tangled wording to make your answer mean the opposite of what you intended. Three negatives do not make a good interface.', example: '“Do not disable offers” sits beside a mysterious switch.', law: 'GDPR consent must be informed and unambiguous.', source: 'consent' },
@@ -34,20 +36,37 @@ entries.push(
   { id: 'unsubscribe', name: 'Unsubscribe obstruction', description: 'Adding detours between a request to stop messages and the option that actually stops them.', example: 'An email preferences page promotes a temporary pause while hiding the permanent opt-out.', law: 'The FTC identifies obstructive cancellation flows as a dark-pattern concern. Applicable requirements depend on context.', source: 'ftc' },
   { id: 'contacts', name: 'Forced sharing', description: 'Pressuring people to upload an address book using prominent acceptance and confusing refusal choices.', example: 'Find-friends onboarding offers a one-time upload after you deny contact access.', law: 'Where GDPR consent is the basis, it must be freely given, specific, informed and unambiguous.', source: 'consent' },
   { id: 'delete', name: 'Account roach motel', description: 'Making account creation easy while burying the permanent exit behind settings and retention offers.', example: 'Deactivate and Take a break appear before a hidden Delete account option.', law: 'Deceptive exit obstacles can raise consumer-protection concerns; account deletion rights depend on the context.', source: 'ftc' },
-  { id: 'price', name: 'Price framing', description: 'Using different billing periods or a low headline rate to make a more expensive plan look cheaper.', example: '$1.99 per week costs $103.48 over 52 weeks, more than $6 per month over 12 months.', law: 'Comparing billing periods is not inherently unlawful. Deceptive pricing or hidden fees can raise FTC Act concerns.', source: 'ftc' },
+  { id: 'price', name: 'Price framing and drip pricing', description: 'Using different billing periods and added fees to make an expensive plan look cheaper.', example: '$1.99 per week costs $103.48 over 52 weeks, more than $6 per month over 12 months.', law: 'Comparing billing periods is not inherently unlawful. Deceptive pricing or hidden fees can raise FTC Act concerns.', source: 'ftc' },
 );
 
+entries.push(
+  { id: 'phish', name: 'Impersonation', description: 'A familiar sender name can hide an unrelated address. Compare the actual domain with the one the game supplies.', example: 'A message from luma.example.mail.example is outside the stated luma.example domain.', law: 'FTC guidance describes how impersonation messages seek passwords and other personal information. Domain matching here is a simplified puzzle, not proof that a real email is safe.', source: 'phishing' },
+  { id: 'adspot', name: 'Paid posts', description: 'Advertising can look like the ordinary posts around it. Sponsorship disclosures identify the paid placement.', example: 'A recommendation is labelled Sponsored or Paid partnership rather than Following.', law: 'FTC guidance explains that advertising should be recognizable and that necessary disclosures must be clear and prominent. The game tests recognition rather than declaring every sponsored post unlawful.', source: 'nativeads' },
+  { id: 'disconnect', name: 'Bundled tracking', description: 'Advertising connections are mixed with essential functions.', example: 'Checkout needs its basket, but not an ad auction profile.', law: 'The FTC discusses interfaces that steer data choices. Requirements depend on context.', source: 'ftc' },
+  { id: 'mask', name: 'Excessive data exposure', description: 'A report includes identifiers it does not need.', example: 'Publish survey totals while redacting names and contact details.', law: 'The game illustrates selective disclosure; real privacy obligations depend on the data and purpose.', source: 'ftc' },
+  { id: 'shred', name: 'Unnecessary retention', description: 'Keeping identifying records when anonymous reports would serve the task.', example: 'An aggregate report needs no individual contact sheet.', law: 'This is a data-minimisation exercise, not a universal instruction to destroy records.', source: 'ftc' },
+  { id: 'sort', name: 'Permission bundling', description: 'Unrelated permissions are presented alongside those needed for a task.', example: 'A voice recorder asks for an address book as well as microphone access.', law: 'Permission needs depend on the stated task; the game supplies an explicit requirements list.', source: 'ftc' },
+  { id: 'prove', name: 'Misleading claims', description: 'A sales claim conflicts with its own records or terms.', example: 'A claimed discount leaves the price unchanged from yesterday.', law: 'Evidence and context matter when assessing whether a claim misleads.', source: 'ftc' },
+  { id: 'authentic', name: 'Fake social proof', description: 'A review feed inflates apparent independent support.', example: 'The same account and review are counted again as a different buyer.', law: 'An incentive alone does not establish illegality. This puzzle distinguishes disclosed samples from duplicate copies and false independence claims.', source: 'deceptive' },
+  { id: 'stock', name: 'Fake scarcity', description: 'A low-stock claim conflicts with visible inventory records.', example: 'Only one left is displayed while the same-time ledger shows twelve available.', law: 'Low stock can be real; this puzzle flags only a contradiction supported by records.', source: 'deceptive' },
+  { id: 'basket', name: 'Substitution at checkout', description: 'A selected product or quantity changes during checkout.', example: 'One standard mug becomes two mugs or a premium model.', law: 'The selection receipt supplies the comparison; a changed line differs from an added extra.', source: 'deceptive' },
+  { id: 'label', name: 'Native advertising', description: 'Paid cards resemble independently chosen editorial content.', example: 'A lifestyle recommendation reveals sponsor approval in its disclosure.', law: 'A headline alone cannot establish sponsorship. Read the disclosure before classifying.', source: 'deceptive' },
+  { id: 'guest', name: 'Forced enrolment', description: 'Checkout steers a purchaser toward an unnecessary account.', example: 'Guest checkout sits beneath account creation and rewards offers.', law: 'Account requirements are context-dependent. The fictional shop explicitly offers guest checkout.', source: 'deceptive' },
+);
+
+const canonicalId = id => id === 'cheaper' ? 'price' : id;
 const KEY = 'reject-all-v1';
 export function createProgress(getStorage = () => globalThis.localStorage) {
   let data = { unlocked: [], seen: [], best: 0, settings: {} };
   try {
     const saved = JSON.parse(getStorage().getItem(KEY));
     if (saved && typeof saved === 'object') {
-      data.unlocked = Array.isArray(saved.unlocked) ? [...new Set(saved.unlocked.filter(id => entries.some(entry => entry.id === id)))] : [];
+      data.unlocked = Array.isArray(saved.unlocked) ? [...new Set(saved.unlocked.map(canonicalId).filter(id => entries.some(entry => entry.id === id)))] : [];
       // A v1 unlock proves an encounter; losses were not recorded in v1.
-      data.seen = [...new Set([...data.unlocked, ...(Array.isArray(saved.seen) ? saved.seen : [])])].filter(id => entries.some(entry => entry.id === id));
+      data.seen = [...new Set([...data.unlocked, ...(Array.isArray(saved.seen) ? saved.seen.map(canonicalId) : [])])].filter(id => entries.some(entry => entry.id === id));
       data.best = Number.isFinite(saved.best) && saved.best >= 0 ? Math.floor(saved.best) : 0;
       for (const name of ['mute', 'relaxed', 'reduced']) if (typeof saved.settings?.[name] === 'boolean') data.settings[name] = saved.settings[name];
+      for (const name of ['musicVolume', 'effectsVolume']) if (Number.isFinite(saved.settings?.[name])) data.settings[name] = Math.max(0, Math.min(1, saved.settings[name]));
     }
   } catch { /* Memory-only progress remains usable when storage is denied. */ }
   const save = () => { try { getStorage().setItem(KEY, JSON.stringify(data)); } catch { /* Memory-only fallback. */ } };
@@ -57,10 +76,12 @@ export function createProgress(getStorage = () => globalThis.localStorage) {
     get best() { return data.best; },
     get settings() { return { ...data.settings }; },
     encounter(id) {
+      id = canonicalId(id);
       if (!entries.some(entry => entry.id === id) || data.seen.includes(id)) return false;
       data.seen.push(id); save(); return true;
     },
     unlock(id) {
+      id = canonicalId(id);
       if (!entries.some(entry => entry.id === id) || data.unlocked.includes(id)) return false;
       data.unlocked.push(id); save(); return true;
     },

@@ -11,11 +11,12 @@ export default {
     const config = create(rng);
     let dodges = tierFor(difficulty) === 3 ? (options.reduced ? 1 : 2) : 0;
     const game = session(root, rng, 'Ribbon Quarry', difficulty);
-    heading(game.content, `${config.offer}% off. Your dignity included.`, 'Join our email list. We have so much to say.');
+    const answerWall = game.identity === 'qa';
+    heading(game.content, answerWall ? 'Keep reading. Keep learning.' : `${config.offer}% off. Your dignity included.`, answerWall ? 'Create a free account for more answers and email recommendations.' : 'Join our email list. We have so much to say.');
     const actions = [
-      () => button(game, game.content, 'Yes! Send me everything', () => finish(false), 'site-primary jumbo', 'accept'),
+      () => button(game, game.content, answerWall ? 'Create my account' : 'Yes! Send me everything', () => finish(false), 'site-primary jumbo', 'accept'),
       () => {
-        const decline = button(game, game.content, config.insult, () => finish(true), 'fine-link evasive-link', 'decline');
+        const decline = button(game, game.content, answerWall ? 'No thanks, I prefer guessing' : config.insult, () => finish(true), 'fine-link evasive-link', 'decline');
         game.on(decline, 'pointerenter', event => {
           if (event.pointerType !== 'mouse' || dodges === 0) return;
           dodges--;

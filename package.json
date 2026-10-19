@@ -2,5 +2,5 @@
   "name": "reject-all",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test tests/", "start": "node tools/serve.mjs" }
+  "scripts": { "test": "node --test tests/", "start": "node tools/serve.mjs", "release:check": "node tools/release-check.mjs", "release:zip": "node tools/package-itch.cjs" }
 }

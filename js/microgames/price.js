@@ -1,4 +1,4 @@
-import { integer, shuffle } from '../random.js';
+import { integer, shuffle, pick } from '../random.js';
 import { tierFor } from '../engine.js';
 import { session, heading, button, element } from './shared.js';
 
@@ -6,12 +6,16 @@ export const yearlyCost = plan => plan.cents * plan.periods + plan.fee;
 export function create(rng, difficulty) {
   const tier = tierFor(difficulty);
   const plans = [
-    { name: 'Flex', cents: 199, period: 'week', periods: 52, fee: 0 },
-    { name: 'Monthly', cents: integer(rng, 5, 7) * 100, period: 'month', periods: 12, fee: 0 },
-    { name: 'Annual', cents: integer(rng, 54, 59) * 100, period: 'year', periods: 1, fee: 0 },
-    { name: 'Quarterly', cents: 1200, period: 'quarter', periods: 4, fee: integer(rng, 20, 30) * 100 + 50 },
+    { name: 'Flex', cents: pick(rng, [99, 149, 199]), period: 'week', periods: 52, fee: 0 },
+    { name: 'Monthly', cents: integer(rng, 5, 10) * 100, period: 'month', periods: 12, fee: 0 },
+    { name: 'Annual', cents: integer(rng, 48, 109) * 100 + 50, period: 'year', periods: 1, fee: 0 },
+    { name: 'Quarterly', cents: integer(rng, 12, 25) * 100, period: 'quarter', periods: 4, fee: integer(rng, 0, 24) * 100 + 25 },
   ];
-  if (tier === 3) plans[2].fee = 4000;
+  // Distinct cent endings make ties impossible without rerolling a seeded puzzle.
+  if (tier === 3) {
+    plans[1].fee = integer(rng, 0, 12) * 100;
+    plans[2].fee = pick(rng, [0, 1200, 2400, 4000]);
+  }
   return shuffle(rng, plans.slice(0, tier + 1));
 }
 export default {
@@ -20,7 +24,7 @@ export default {
     const plans = create(rng, difficulty);
     const best = Math.min(...plans.map(yearlyCost));
     const game = session(root, rng, 'Budget Birch', difficulty);
-    heading(game.content, 'From just $1.99/week', 'Pick the lowest cost for your first full year.');
+    heading(game.content, game.identity === 'travel' ? 'Compare Traveller membership plans' : 'Small payments. Bigger picture.', 'Pick the lowest cost for your first full year.');
     game.content.append(element('p', 'Compare 52 weeks = 12 months = 4 quarters = 1 year. Include one-time setup fees.', 'smallprint'));
     const grid = element('div', '', 'plan-grid'); game.content.append(grid);
     plans.forEach((plan, index) => {

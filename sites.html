@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f5f7">
+  <title>Sixteen familiar places — Reject All</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/app.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/app-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sites.css">
+  <link rel="stylesheet" href="css/new-games.css">
+  <link rel="preload" as="image" href="assets/catalogue.webp">
+  <link rel="preload" as="image" href="assets/meal.webp">
+  <link rel="preload" as="image" href="assets/astral.webp">
+</head>
+<body class="collection">
+  <header class="collection-header"><a href="index.html" class="collection-brand">× Reject All</a><span>The interface collection</span><a href="index.html" class="collection-play">Play the arcade <span aria-hidden="true">↗</span></a></header>
+  <div class="collection-layout">
+    <aside class="collection-sidebar"><p class="collection-intro">Sixteen familiar places.<br><strong>The same fine print.</strong></p><nav id="identities" aria-label="Choose a website"></nav><p class="collection-note">Different worlds. Familiar tricks.<br>Explore at your own pace.</p><a id="collection-lab" href="tests/smoke.html" class="collection-lab" hidden>Open the test lab</a></aside><!-- release-check: debug-only tests/smoke.html -->
+    <main class="collection-main">
+      <div class="collection-title"><div><h1 id="identity-name">parcel</h1><p id="identity-description">Marketplace</p></div><div class="preview-width" aria-label="Preview width"><button id="desktop-width" type="button" aria-pressed="true">Desktop</button><button id="phone-width" type="button" aria-pressed="false">Phone</button></div></div>
+      <div class="collection-toolbar"><label for="scenario">Try a situation</label><select id="scenario"></select><button id="shuffle-site" type="button">Another variation</button><button id="practice-start" type="button" hidden>Begin observation</button><a id="play-situation" href="index.html">Try with a timer ↗</a></div>
+      <div id="preview-frame" class="preview-frame"><div id="preview-site" class="fake-site"></div></div>
+      <div class="collection-result"><span id="preview-result" role="status" aria-live="polite">Explore the controls. No timer.</span><button id="restart-preview" type="button">Reset situation</button></div>
+      <p class="collection-caption">Original artwork. Fictional services. All the pressure of the internet, with none of the actual purchases.</p>
+    </main>
+  </div>
+  <script type="module" src="js/site-gallery.js"></script>
+</body>
+</html>

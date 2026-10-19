@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2147dc">
+  <title>Reject All — Sound room</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/app.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/app-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead"><a class="wordmark" href="index.html">× Reject All</a><span>The sound room</span></header>
+    <main class="menu-page sound-room">
+      <p class="edition">An original arcade soundtrack</p><h1>PANIC BUTTON.</h1>
+      <p>Quick hands. Loud decisions. Next round!</p>
+      <p class="sound-description">Brass jabs, pulse hooks, bouncing bass and dry, punchy breaks. Two-bar surprises drive each run from 152 to 202 BPM.</p>
+      <div class="sound-scenes" role="group" aria-label="Music arrangement">
+        <button data-scene="menu" aria-pressed="true">Title screen</button>
+        <button data-scene="run" data-level="1" aria-pressed="false">Early run</button>
+        <button data-scene="run" data-level="5" aria-pressed="false">Picking up</button>
+        <button data-scene="run" data-level="11" aria-pressed="false">Full speed</button>
+        <button data-scene="results" aria-pressed="false">Results</button>
+      </div>
+      <p><button id="listen" class="primary">Play music</button> <button id="stop-audio">Stop all</button></p>
+      <label class="setting"><span><strong>Music</strong></span><span class="volume-control"><input id="music-level" type="range" min="0" max="100" value="55" aria-label="Music volume"><output id="music-value">55%</output></span></label>
+      <label class="setting"><span><strong>Effects</strong></span><span class="volume-control"><input id="effects-level" type="range" min="0" max="100" value="75" aria-label="Effects volume"><output id="effects-value">75%</output></span></label>
+      <h2>Ready, reject, repeat.</h2><p>Try the round stings, victory bursts and mistake zaps alone, or over the music.</p>
+      <div id="sound-cues" class="sound-cues"></div>
+      <p id="audio-status" class="smallprint" role="status">Press Play music or try a sound. Audio starts only after your interaction.</p>
+      <p class="smallprint">Original composition and synthesized instruments. No voice samples, remote services or downloads. This room's levels do not change your saved game settings.</p>
+      <p><a href="index.html">Back to the game</a> · <a href="sites.html">Explore the websites</a></p>
+    </main>
+    <footer class="site-footer"><span>Reject All · Panic Button</span><span>Listen on speakers or headphones.</span></footer>
+  </div>
+  <script type="module" src="js/audio-room.js"></script>
+</body>
+</html>

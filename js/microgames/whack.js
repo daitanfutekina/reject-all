@@ -10,13 +10,12 @@ export default {
     const status = element('p', 'Your settings have been updated.', 'smallprint'); game.content.append(status);
     const names = shuffle(rng, ['Ad tracking', 'Location sharing', 'Partner profiling', 'Usage sharing']).slice(0, 1 + tierFor(difficulty));
     const enabled = names.map(() => true);
-    let remaining = options.duration ?? 7700, stableSince = null, elapsed = 0, previous = null;
+    let remaining = options.duration ?? 7700, elapsed = 0, previous = null;
     const interval = Math.max(850, 1450 - difficulty * 50) * (options.relaxed ? 1.75 : 1);
     let nextReset = interval;
     const row = element('div', '', 'toggle-row'); game.content.append(row);
     const controls = names.map((name, index) => button(game, row, '', () => {
       enabled[index] = !enabled[index]; paint();
-      stableSince = enabled.every(value => !value) ? remaining : null;
     }, 'privacy-toggle', `toggle-${index}`));
     function paint() {
       controls.forEach((control, index) => {
@@ -26,14 +25,14 @@ export default {
     }
     paint();
     return { ...game,
-      timeoutResult: () => enabled.every(value => !value) && stableSince !== null && stableSince - remaining >= 350,
+      timeoutResult: () => enabled.every(value => !value),
       update(value) {
         if (previous !== null) elapsed += Math.max(0, previous - value);
         remaining = value; previous = value;
         // Leave a final reaction window; never reset on the expiry frame.
         if (elapsed >= nextReset && remaining > 900) {
           enabled[integer(rng, 0, enabled.length - 1)] = true;
-          stableSince = null; nextReset = elapsed + interval;
+          nextReset = elapsed + interval;
           status.textContent = 'Update applied. A preference was reset to ON.'; paint();
         }
       },

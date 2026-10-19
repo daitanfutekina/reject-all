@@ -8,7 +8,7 @@ export default {
   setup(root, rng, difficulty, finish) {
     const config = create(rng);
     const game = session(root, rng, 'Hurry Thimble', difficulty);
-    heading(game.content, `ONLY ${config.stock} LEFT!`, `${config.item}. A life-changing $${config.price}. Probably.`);
+    heading(game.content, `ONLY ${config.stock} LEFT!`, game.identity === 'tickets' ? `Tickets for Midnight Frequency · $${config.price} each. Don’t rush into buying.` : game.identity === 'travel' ? `Sea-view rooms · $${config.price}/night. Don’t rush into booking.` : `${config.item}. A life-changing $${config.price}. Probably.`);
     const count = element('div', '00:04', 'urgency-clock');
     const pitch = element('p', pick(rng, ['Offer ends any second. Again.', 'Someone nearby is looking at this.', 'Your basket is feeling lonely.', 'These prices cannot last forever.', 'Reserved just for you. Briefly.', 'A once-per-refresh opportunity.']));
     if (rng() < 0.5) game.content.append(count, pitch); else game.content.append(pitch, count);

@@ -1,0 +1,14 @@
+{
+  "name": "Reject All",
+  "short_name": "Reject All",
+  "description": "Twenty-two quick games. Sixteen very pushy websites. Four lives.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#2147dc",
+  "theme_color": "#2147dc",
+  "icons": [
+    { "src": "assets/icons/app-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icons/app-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
